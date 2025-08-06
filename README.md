@@ -1,4 +1,3 @@
-```markdown
 # **Проект "TO-DO"**  
 
 ## 🛠 **Установка и настройка**  
@@ -10,6 +9,7 @@
 
 ```bash
 git clone git@github.com:Robosoft-MIK-2025/star-lander.git
+cd star-lander
 docker compose up --build <TO-DO>
 ```
 
@@ -110,17 +110,25 @@ docker push fabook/mik:common
 
 ```bash
 # 1. Создать новую ветку  
-git checkout -b имя_ветки  
+git checkout -b <имя_ветки>  
+```
 
 # 2. Проверить текущую ветку  
+```bash
 git branch  
+```
 
 # 3. Добавить изменения  
+```bash
 git add .  
+```
 
 # 4. Создать коммит  
-git commit -m "тип: описание"  
+```bash
+git commit -m "<тип>: <описание>"  
+```
 
 # 5. Загрузить ветку на GitHub  
-git push -u origin имя_ветки  
+```bash
+git push -u origin <имя_ветки>  
 ```
