@@ -25,7 +25,7 @@ docker compose up --build <TO-DO>
 Скачайте репозиторий и перейдидте в его корень
 ```bash
 git clone git@github.com:Robosoft-MIK-2025/maneuver.git
-cd star-lander
+cd maneuver
 ```
 
 Запустите контейнер:  
