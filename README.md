@@ -9,7 +9,7 @@
 
 ```bash
 git clone git@github.com:Robosoft-MIK-2025/maneuver.git
-cd star-lander
+cd maneuver
 docker compose up --build <TO-DO>
 ```
 
