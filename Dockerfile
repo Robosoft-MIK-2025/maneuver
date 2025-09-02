@@ -68,7 +68,7 @@ RUN cd /home/$USERNAME \
     && git clone https://github.com/PX4/PX4-Autopilot.git --recursive \
     && bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
 RUN cd /home/$USERNAME \
-    git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git \
+    && git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git \
     && cd Micro-XRCE-DDS-Agent \
     && sed -i '98s|2.12|2.13|' CMakeLists.txt \
     && sed -i '99s|2.12.x|2.13.3|' CMakeLists.txt \
