@@ -55,12 +55,54 @@ RUN apt-get update && apt-get upgrade -y && \
     ros-${ROS_DISTRO}-camera-calibration \
     ros-${ROS_DISTRO}-gazebo-ros-pkgs \
     ros-${ROS_DISTRO}-nav2-bringup \
+    # MoveIt2 packages
+    ros-${ROS_DISTRO}-moveit \
+    ros-${ROS_DISTRO}-moveit-core \
+    ros-${ROS_DISTRO}-moveit-ros \
+    ros-${ROS_DISTRO}-moveit-planners \
+    ros-${ROS_DISTRO}-moveit-planners-ompl \
+    ros-${ROS_DISTRO}-moveit-ros-move-group \
+    ros-${ROS_DISTRO}-moveit-ros-visualization \
+    ros-${ROS_DISTRO}-moveit-ros-benchmarks \
+    ros-${ROS_DISTRO}-moveit-ros-planning \
+    ros-${ROS_DISTRO}-moveit-ros-planning-interface \
+    ros-${ROS_DISTRO}-moveit-ros-robot-interaction \
+    ros-${ROS_DISTRO}-moveit-ros-perception \
+    ros-${ROS_DISTRO}-moveit-ros-control-interface \
+    ros-${ROS_DISTRO}-moveit-visual-tools \
+    ros-${ROS_DISTRO}-moveit-simple-controller-manager \
+    ros-${ROS_DISTRO}-moveit-common \
+    #
     libcanberra-gtk-module \
     libcanberra-gtk3-module \
     at-spi2-core \
     x11-apps \
     xauth \
     --fix-missing
+    
+# Install dependencies for QGroundControl
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+    squashfs-tools \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-libav \
+    gstreamer1.0-gl \
+    libfuse2 \
+    libxcb-xinerama0 \
+    libxkbcommon-x11-0 \
+    libxcb-cursor-dev \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install QGroundControl AppImage
+RUN cd /home/$USERNAME \
+    && wget https://d176tv9ibo4jno.cloudfront.net/builds/master/QGroundControl-x86_64.AppImage -O ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
+    && chmod +x ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
+    && usermod -aG dialout mobile \
+    # && systemctl mask --now ModemManager.service \
+    # На всякий случай, если директория не существует
+    && mkdir -p /etc/systemd/system \
+    && ln -sf /dev/null /etc/systemd/system/ModemManager.service
 
 #Утановка PX4-Autopilot
 RUN apt-get update && apt-get install -y wget
