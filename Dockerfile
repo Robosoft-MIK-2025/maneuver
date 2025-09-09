@@ -4,6 +4,7 @@ FROM osrf/ros:humble-desktop-full
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV ROS_DISTRO=humble
+ENV CURRENT_ROS_WS=/home/mobile/Q_ground_control
 
 # Set arguments for user creation
 ARG USERNAME=mobile
@@ -95,12 +96,11 @@ RUN apt-get update && apt-get upgrade -y && \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install QGroundControl AppImage
-RUN cd /home/$USERNAME \
+RUN mkdir -p ${CURRENT_ROS_WS} \
+    && cd ${CURRENT_ROS_WS} \
     && wget https://d176tv9ibo4jno.cloudfront.net/builds/master/QGroundControl-x86_64.AppImage -O ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
     && chmod +x ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
     && usermod -aG dialout mobile \
-    # && systemctl mask --now ModemManager.service \
-    # На всякий случай, если директория не существует
     && mkdir -p /etc/systemd/system \
     && ln -sf /dev/null /etc/systemd/system/ModemManager.service
 
