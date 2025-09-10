@@ -132,3 +132,37 @@ git commit -m "<тип>: <описание>"
 ```bash
 git push -u origin <имя_ветки>  
 ```
+
+### Installing the Docker image with ROS2 and PX4 preinstalled
+An instruction by George
+
+
+
+**WARNING: This is a work in progress. Run for your own peril!**
+
+#### 1. Installing the image
+
+Before installing,
+- Ensure you have [Docker](https://docs.docker.com/engine/install/) installed (`docker -v` should output docker version or show an error if docker is not installed)
+- Ensure you're using the correct git branch: `EgorBranch`. Files in other branches may differ. (The code below uses the correct branch)
+- Use the Ethernet connection, it's 1000MiB capable and is WAY faster than WiFi (in Dorm 5 at least)
+- (optional and potentially dangerous) Run `docker system prune -a -f` remove all user files in docker to ensure that no previous attempts/containers are interfering with the install. **WARNING: THIS WILL ERASE ALL DOCKER CONTAINERS AND FILES YOU HAVE ON YOUR LOCAL MACHINE**
+
+
+Then run:
+```
+git clone -b EgorBranch https://github.com/Robosoft-MIK-2025/maneuver.git
+cd maneuver
+docker compose up terminal
+```
+
+Code explanation:
+- `git clone -b EgorBranch https://github.com/Robosoft-MIK-2025/maneuver.git` downloads latest files from MIK github repo from `EgorBranch` branch
+- `cd maneuver` switch to the `maneuver` folder
+- `docker compose up terminal` runs the container (also downloads all the dependencies on the first run)
+
+#### 2. Starting PX4 sim
+1. Ensure that the docker container is running (a terminal running `docker compose up terminal` is open)
+2. Open two more terminal windows and connect them to the docker container using `docker compose exec terminal bash`
+3. In one terminal, start the agent with settings for connecting to the uXRCE-DDS client running on the simulator: `MicroXRCEAgent udp4 -p 8888`
+4. In the other terminal, start the simulator:  `cd /home/mobile/PX4-Autopilot && make px4_sitl gz_x500`
