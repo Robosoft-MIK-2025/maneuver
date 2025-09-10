@@ -132,4 +132,6 @@ RUN sudo rosdep init || true \
 # Добавляем source в .bashrc
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/$USERNAME/.bashrc
 
+USER $USERNAME
 CMD ["bash"]
+
