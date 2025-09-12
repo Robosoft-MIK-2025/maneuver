@@ -4,7 +4,7 @@ FROM osrf/ros:humble-desktop-full
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DISTRO=humble
 ENV CURRENT_ROS_WS=/home/mobile/Q_ground_control
-
+ENV MURK=DA
 # ==== СОЗДАНИЕ ПОЛЬЗОВАТЕЛЯ ====
 ARG USERNAME=mobile
 ARG USER_UID=1000
@@ -12,7 +12,6 @@ ARG USER_GID=$USER_UID
 
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update && apt-get install -y sudo \
     && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
@@ -26,9 +25,6 @@ RUN apt-get update && apt-get upgrade -y \
        x11-apps xauth wget \
        python3-colcon-common-extensions python3-rosdep python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
-
-# ==== ЧИСТИМ ДУБЛИКАТЫ РЕПО ROS2 ====
-RUN rm -f /etc/apt/sources.list.d/ros2-latest.list
 
 # ==== ИНИЦ rosdep ====
 RUN rosdep init || true && rosdep update
@@ -60,31 +56,42 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-moveit \
     && rm -rf /var/lib/apt/lists/*
 
+
+USER $USERNAME
+WORKDIR /home/$USERNAME
+ENV HOME=/home/$USERNAME
+
 # ==== УСТАНОВКА QGroundControl ====
 RUN mkdir -p ${CURRENT_ROS_WS} \
     && wget https://d176tv9ibo4jno.cloudfront.net/builds/master/QGroundControl-x86_64.AppImage \
         -O ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
-    && chmod +x ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
-    && usermod -aG dialout $USERNAME \
+    && sudo chmod +x ${CURRENT_ROS_WS}/QGroundControl-x86_64.AppImage \
+    && sudo usermod -aG dialout $USERNAME \
     && mkdir -p /etc/systemd/system \
-    && ln -sf /dev/null /etc/systemd/system/ModemManager.service
+    && sudo ln -sf /dev/null /etc/systemd/system/ModemManager.service
 
+USER $USERNAME
+WORKDIR /home/$USERNAME
+ENV HOME=/home/$USERNAME
 # ==== УСТАНОВКА PX4 + Micro XRCE-DDS ====
 RUN cd /home/$USERNAME \
+    && sudo chown -R $USERNAME:$USERNAME /home \
     && git clone https://github.com/PX4/PX4-Autopilot.git --recursive \
-    && bash ./PX4-Autopilot/Tools/setup/ubuntu.sh \
+    && USER="mobile" bash ./PX4-Autopilot/Tools/setup/ubuntu.sh \
     && git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git \
     && cd Micro-XRCE-DDS-Agent \
     && sed -i '98s|2.12|2.13|' CMakeLists.txt \
     && sed -i '99s|2.12.x|2.13.3|' CMakeLists.txt \
-    && mkdir build && cd build && cmake .. && make && make install && ldconfig /usr/local/lib/
+    && mkdir build && cd build && cmake .. && sudo make && sudo make install && sudo ldconfig /usr/local/lib/ \
+    && sudo chown -R ${USER}:${USER} /home/mobile \
+    && mkdir /home/ros2_ws \
+    && sudo chown -R ${USER}:${USER} /home/ros2_ws
 
 # ==== ДОБАВЛЯЕМ SOURCE В bashrc ====
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/$USERNAME/.bashrc \
-    && echo "source /ws_moveit2/install/setup.bash" >> /home/$USERNAME/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/$USERNAME/.bashrc 
 
+# ==== ПЕРЕКЛЮЧАЕМСЯ НА ПОЛЬЗОВАТЕЛЯ ====
 USER $USERNAME
 WORKDIR /home/$USERNAME
-
 
 CMD ["bash"]
