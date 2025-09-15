@@ -27,6 +27,7 @@ endif()
 # install launch files
 install(DIRECTORY
   launch
+  description
   DESTINATION share/${PROJECT_NAME}
 )
 
