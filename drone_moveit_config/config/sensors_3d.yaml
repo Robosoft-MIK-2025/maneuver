@@ -1,0 +1,21 @@
+#sensors:
+#  - default_sensor
+#default_sensor:
+#  filtered_cloud_topic: ""
+#  max_range: ""
+#  max_update_rate: ""
+#  padding_offset: ""
+#  padding_scale: ""
+#  point_cloud_topic: /depth_camera/points
+#  point_subsample: ""
+#  sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+
+
+sensors:
+  - sensor_plugin: occupancy_map_monitor/OctomapUpdater
+    octomap_topic: /octomap  # Topic publishing octomap_msgs/Octomap
+    max_range: 10.0
+    frame_subsample: 1
+    point_subsample: 1
+    padding_offset: 0.1  # Padding for drone’s collision sphere (0.3m radius)
+    padding_scale: 1.0
