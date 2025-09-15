@@ -32,3 +32,5 @@ install(DIRECTORY
 )
 
 ament_package()
+
+install(DIRECTORY urdf DESTINATION share/${PROJECT_NAME})
