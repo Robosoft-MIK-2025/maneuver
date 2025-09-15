@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     auto pub = node->create_publisher<octomap_msgs::msg::Octomap>("octomap", 1);
 
     // Загрузка OctoMap из файла
-    std::string map_path = "/home/ros2_ws/src/fr_campus.ot"; // Укажите путь к файлу карты
+    std::string map_path = "/home/ros2_ws/src/fr_079.ot"; // Укажите путь к файлу карты
     octomap::OcTree* octree = dynamic_cast<octomap::OcTree*>(octomap::AbstractOcTree::read(map_path));
     if (!octree) {
         RCLCPP_ERROR(node->get_logger(), "Не удалось загрузить карту из файла");
