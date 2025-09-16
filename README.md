@@ -65,7 +65,7 @@ docker push fabook/mik:common
 > Тег может быть любым, но по умолчанию `docker compose` использует тег `latest`.  
 
 ---
-
+## ** Инструкция по запуску симуляции с дроном**
 После успешной сборки пакетов с помощью colcon build и активации окружения командой source install/setup.bash, выполните следующую команду для запуска основного стека:
 ros2 launch maneuver_bringup full_launch.py
 Эта команда автоматически:
