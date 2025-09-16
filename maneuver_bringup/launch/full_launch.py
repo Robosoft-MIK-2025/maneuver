@@ -14,6 +14,8 @@ def generate_launch_description():
                 "bridge.yaml",
             ]
         )
+    
+
 
 
     return LaunchDescription([
@@ -24,7 +26,7 @@ def generate_launch_description():
             shell=True
         ),
         TimerAction(
-            period=15.0,
+            period=10.0,
             actions=[ExecuteProcess(
                     cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
                     output='log',
@@ -32,7 +34,7 @@ def generate_launch_description():
             ]
         ),
         TimerAction(
-            period=10.0,
+            period=15.0,
             actions=[ExecuteProcess(
                     cmd=['cd', '/home/mobile/Q_ground_control/', '\n', 
                          'APPIMAGE_EXTRACT_AND_RUN=1', './QGroundControl-x86_64.AppImage'],
@@ -41,7 +43,7 @@ def generate_launch_description():
             ]
         ),
         TimerAction(
-            period=10.0,
+            period=25.0,
             actions=[
                 Node(package="ros_gz_bridge",
                     executable="parameter_bridge",
@@ -50,5 +52,20 @@ def generate_launch_description():
                     parameters=[bridge_config] 
                 ),
             ]
+        ),
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=[
+                '--x', '0.0',  # Translation in x
+                '--y', '0.0',  # Translation in y
+                '--z', '0.0',  # Translation in z
+                '--roll', '0.0',  # Roll angle in radians
+                '--pitch', '0.0',  # Pitch angle in radians
+                '--yaw', '0.0',  # Yaw angle in radians
+                '--frame-id', 'world',  # Parent frame
+                '--child-frame-id', 'map'  # Child frame
+            ],
+            name='world_to_map_tf'
         ),
     ])
