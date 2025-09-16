@@ -49,7 +49,7 @@ docker build -t image_name -f Dockerfile .
 
 Тег образа:  
 ```bash
-docker tag image_name fabook/mik:common
+docker tag image_name fabook/mik:v0.0.5
 ```
 
 Загрузка образа в Docker Hub:  
