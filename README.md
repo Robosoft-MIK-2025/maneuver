@@ -54,7 +54,12 @@ docker tag image_name fabook/mik:common
 
 Загрузка образа в Docker Hub:  
 ```bash
-docker push fabook/mik:common
+docker push fabook/mik:v0.0.5
+```
+
+Выгрузка образа из Docker Hub:  
+```bash
+docker pull fabook/mik:v0.0.5
 ```
 
 > [!IMPORTANT]  
