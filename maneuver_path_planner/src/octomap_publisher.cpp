@@ -6,7 +6,7 @@
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
     auto node = std::make_shared<rclcpp::Node>("octomap_publisher");
-    auto pub = node->create_publisher<octomap_msgs::msg::Octomap>("/octomap/example", 1);
+    auto pub = node->create_publisher<octomap_msgs::msg::Octomap>("/octomap", 1);
 
     // Загрузка OctoMap из файла
     std::string map_path = "/home/ros2_ws/src/fr_079.ot"; // Укажите путь к файлу карты
