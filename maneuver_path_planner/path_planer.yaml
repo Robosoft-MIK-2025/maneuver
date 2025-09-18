@@ -33,7 +33,7 @@ move_group:
 
     sensors:
       - sensor_plugin: occupancy_map_monitor/OctomapUpdater
-        octomap_topic: /octomap/example
+        map_topic: /octomap_full
         max_update_rate: 1.0
 
 planner_configs:

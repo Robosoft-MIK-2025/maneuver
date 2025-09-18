@@ -38,7 +38,11 @@ def generate_launch_description():
     )
     # Загружаем как параметр
     kinematics_parameters = {'kinematics_yaml': kinematics_path}
-
+    rviz_config_path = os.path.join(
+        get_package_share_directory('maneuver_path_planner'),
+        'rviz',
+        'moveit_config.rviz'
+    )
 
     return LaunchDescription([
         Node(
@@ -74,14 +78,20 @@ def generate_launch_description():
 	    executable="rviz2",
 	    name="rviz2",
 	    output="screen",
-	    arguments=["-d", os.path.join(
-		get_package_share_directory('maneuver_path_planner'),
-		'rviz',
-		'moveit_config.rviz'
-	    )],
+	    arguments=["-d", rviz_config_path],
 	    parameters=[robot_description, robot_description_semantic]
-	)
+	),
+	
+	Node(
+            package='octomap_server',
+            executable='octomap_server_node',
+            name='octomap_server',
+            output='screen',
+            parameters=[{
+                'frame_id': 'map',
+                'resolution': 0.05  # Можно изменить под ваши нужды
+            }]
+        )
 
 
     ])
-

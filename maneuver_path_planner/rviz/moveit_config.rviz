@@ -22,7 +22,7 @@ Visualization Manager:
       Enabled: true
       Name: PlanningScene
       Robot Description: robot_description
-      Planning Scene Topic: /planning_scene
+      Planning Scene Topic: /planning_scene #возможно, стоит поменять на /move_group/monitored_planning_scene, если не работает
       Scene Name: default
 
     - Class: rviz_default_plugins/TF
@@ -37,10 +37,10 @@ Visualization Manager:
       Name: Trajectory
       Marker Topic: /display_planned_path
 
-    - Class: rviz_default_plugins/Map
+    - Class: octomap_rviz_plugins/OccupancyMap
       Enabled: true
       Name: OctoMap
-      Topic: /octomap
+      Topic: /octomap_full
       Alpha: 0.7
       Color Scheme: map
 
