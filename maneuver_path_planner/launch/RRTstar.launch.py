@@ -17,6 +17,16 @@ def generate_launch_description():
         'path_planer.yaml'
     )
 
+    local_planner_param = os.path.join(
+        get_package_share_directory('maneuver_path_planner'),
+        'local_planner_param .yaml'
+    )
+
+    hybrid_planner_param = os.path.join(
+        get_package_share_directory('maneuver_path_planner'),
+        'hybrid_planner_param .yaml'
+    )
+
     urdf_path = os.path.join(
         get_package_share_directory('maneuver_bringup'),
         'description', 
@@ -62,24 +72,10 @@ def generate_launch_description():
                     package="moveit_hybrid_planning",
                     plugin="moveit::hybrid_planning::HybridPlanningManager",
                     name="hybrid_planning_manager",
-                    parameters=[hybrid_planning_manager_param],
+                    parameters=[hybrid_planning_param],
                 ),
             ],
             output="screen",
         )
-
-
-        # Node(
-        #     package = 'moveit_ros_move_group',
-        #     executable = 'move_group',
-        #     name = 'rrt_star_node',
-        #     parameters = [
-        #         config,
-        #         robot_description,
-        #         robot_description_semantic
-        #     ],
-        #     output = 'screen',
-        #     remappings=[('/move_group/result', '/global_path')]
-        # )
     ])
 
