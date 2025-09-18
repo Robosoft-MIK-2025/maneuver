@@ -14,17 +14,20 @@ from moveit_configs_utils import MoveItConfigsBuilder
 def generate_launch_description():
     global_planner_param = os.path.join(
         get_package_share_directory('maneuver_path_planner'),
+        'config',
         'path_planer.yaml'
     )
 
     local_planner_param = os.path.join(
         get_package_share_directory('maneuver_path_planner'),
-        'local_planner_param .yaml'
+        'config',
+        'local_planer_params.yaml'
     )
 
     hybrid_planner_param = os.path.join(
         get_package_share_directory('maneuver_path_planner'),
-        'hybrid_planner_param .yaml'
+        'config',
+        'hybrid_planner_params.yaml'
     )
 
     urdf_path = os.path.join(
@@ -60,10 +63,7 @@ def generate_launch_description():
         'moveit_config.rviz'
     )
 
-    return LaunchDescription([
-
-
-        container = ComposableNodeContainer(
+    container = ComposableNodeContainer(
             name="hybrid_planning_container",
             namespace="/",
             package="rclcpp_components",
@@ -93,11 +93,15 @@ def generate_launch_description():
                     package="moveit_hybrid_planning",
                     plugin="moveit::hybrid_planning::HybridPlanningManager",
                     name="hybrid_planning_manager",
-                    parameters=[hybrid_planning_param],
+                    parameters=[hybrid_planner_param],
                 ),
             ],
             output="screen",
-        )
+    )
+    return LaunchDescription([
+
+
+        container,
 
         Node(
             package='robot_state_publisher',
@@ -112,7 +116,7 @@ def generate_launch_description():
 	    executable='static_transform_publisher',
 	    arguments=['0', '0', '0', '0', '0', '0', 'map', 'base_link'],
 	    name='static_tf_map_to_base'
-	),
+	    ),
 
         
         Node(
@@ -122,9 +126,9 @@ def generate_launch_description():
 	    output="screen",
 	    arguments=["-d", rviz_config_path],
 	    parameters=[robot_description, robot_description_semantic]
-	),
+	    ),
 	
-	Node(
+	    Node(
             package='octomap_server',
             executable='octomap_server_node',
             name='octomap_server',
