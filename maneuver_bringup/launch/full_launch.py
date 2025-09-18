@@ -66,6 +66,7 @@ def generate_launch_description():
                 '--frame-id', 'world',  # Parent frame
                 '--child-frame-id', 'map'  # Child frame
             ],
-            name='world_to_map_tf'
+            name='world_to_map_tf',
+            output="log",
         ),
     ])
