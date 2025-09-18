@@ -34,9 +34,14 @@ RUN git clone https://github.com/linux-can/can-utils.git /tmp/can-utils \
     && cd /tmp/can-utils && make && make install && rm -rf /tmp/can-utils
 
 # ==== УСТАНОВКА ROS ПАКЕТОВ ====
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+    && sudo apt remove 'gazebo*' 'libgazebo*' 'gz-tools*' \
+    && sudo apt autoremove \
+    && apt-get install -y \
     ros-${ROS_DISTRO}-tf2-tools \
+    ros-${ROS_DISTRO}-gazebo-ros-pkgs \
     ros-${ROS_DISTRO}-gazebo-ros \
+    ros-${ROS_DISTRO}-gazebo-plugins \
     ros-${ROS_DISTRO}-robot-state-publisher \
     ros-${ROS_DISTRO}-joint-state-publisher \
     ros-${ROS_DISTRO}-xacro \
@@ -51,7 +56,6 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-gz-ros2-control \
     ros-${ROS_DISTRO}-v4l2-camera \
     ros-${ROS_DISTRO}-camera-calibration \
-    ros-${ROS_DISTRO}-gazebo-ros-pkgs \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-moveit \
     && rm -rf /var/lib/apt/lists/*

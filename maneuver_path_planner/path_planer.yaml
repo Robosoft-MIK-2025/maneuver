@@ -1,5 +1,6 @@
 move_group:
   ros__parameters:
+
     robot_description: robot_description
     robot_description_semantic: robot_description_semantic
 
@@ -33,8 +34,9 @@ move_group:
     octomap_resolution: 0.10
 
     sensors:
-      - sensor_plugin: occupancy_map_monitor/Octomap
-        octomap_topic: /octomap
+
+      - sensor_plugin: occupancy_map_monitor/OctomapUpdater
+        map_topic: /octomap_full
         max_update_rate: 1.0
 
 # OMPL planner configurations
@@ -55,7 +57,7 @@ planner_configs:
 
 # Group-specific configuration
 group_configs:
-  uav:
+  drone_group:
     default_planner_config: RRTstar
     enforce_joint_model_state_space: false   # Floating-base UAV: use SE3
     minx: -20.0

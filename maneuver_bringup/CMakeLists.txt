@@ -28,7 +28,10 @@ endif()
 install(DIRECTORY
   launch
   description
+  config
   DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
+
+install(DIRECTORY urdf DESTINATION share/${PROJECT_NAME})
