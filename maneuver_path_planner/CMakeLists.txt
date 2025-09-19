@@ -10,6 +10,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(octomap_msgs REQUIRED)
 find_package(octomap REQUIRED) # Если необходимо
+
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -33,11 +35,24 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+set(LIBRARIES
+    # Components
+    moveit_global_planner_component
+    moveit_hybrid_planning_manager
+    moveit_local_planner_component)
+ 
+
+
 install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(
+  DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+ )
+  
 install(
   DIRECTORY rviz
   DESTINATION share/${PROJECT_NAME}

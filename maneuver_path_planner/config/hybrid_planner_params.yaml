@@ -1,0 +1,5 @@
+hybrid_planning_manager:
+  ros__parameters:
+    # Define the global and local planner plugins
+    global_planner_plugin: ompl_interface/OMPLPlanner
+    local_planner_plugin: moveit_hybrid_planning/LocalPlannerAdapter
