@@ -91,7 +91,7 @@ def generate_launch_description():
                 ),
                 ComposableNode(
                     package="moveit_hybrid_planning",
-                    plugin="moveit::hybrid_planning::HybridPlanningManager",
+                    plugin="moveit_hybrid_planning/HybridPlanningManager",
                     name="hybrid_planning_manager",
                     parameters=[hybrid_planner_param],
                 ),
