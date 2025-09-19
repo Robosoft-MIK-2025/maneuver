@@ -20,8 +20,9 @@ def generate_launch_description():
 
     return LaunchDescription([
         ExecuteProcess(
-            cmd=['cd', '/home/mobile/PX4-Autopilot', '\n', 
-                 'make', 'px4_sitl', 'gz_x500_depth'],
+            cmd=['cp', '/home/ros2_ws/src/gz_worlds/labirinth.sdf', '/home/mobile/PX4-Autopilot/Tools/simulation/gz/worlds/', '\n'
+                 'cd', '/home/mobile/PX4-Autopilot', '\n', 
+                 'PX4_GZ_WORLD=labirinth', 'make', 'px4_sitl', 'gz_x500_depth'],
             output='log',
             shell=True
         ),
@@ -49,7 +50,7 @@ def generate_launch_description():
                     executable="parameter_bridge",
                     name="depth_camera_bridge",
                     output="screen",
-                    parameters=[bridge_config] 
+                    arguments=['/depth_camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked']
                 ),
             ]
         ),
