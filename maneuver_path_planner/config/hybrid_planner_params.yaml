@@ -1,5 +1,4 @@
-hybrid_planning_manager:
-  ros__parameters:
-    # Define the global and local planner plugins
-    global_planner_plugin: ompl_interface/OMPLPlanner
-    local_planner_plugin: moveit_hybrid_planning/LocalPlannerAdapter
+planner_logic_plugin_name: "moveit_hybrid_planning/ReplanInvalidatedTrajectory"
+local_planning_action_name: "local_planning_action"
+global_planning_action_name: "global_planning_action"
+hybrid_planning_action_name: "hybrid_planning_action"

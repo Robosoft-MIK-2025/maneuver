@@ -1,101 +1,35 @@
+# Which plugin to load for global planning
 global_planner_name: "moveit_hybrid_planning/MoveItPlanningPipeline"
 
-# The rest of these parameters are typical for moveit_cpp
+# Name for the action interface (clients use this to send goals)
+global_planning_action_name: "global_planning_action"
+
 planning_scene_monitor_options:
   name: "planning_scene_monitor"
   robot_description: "robot_description"
   joint_state_topic: "/joint_states"
   attached_collision_object_topic: "/moveit_cpp/planning_scene_monitor"
-  # Subscribe to this topic (The name comes from the perspective of moveit_cpp)
   publish_planning_scene_topic: "/planning_scene"
-  # Publish this topic, e.g. to visualize with RViz
   monitored_planning_scene_topic: "/planning_scene"
   wait_for_initial_state_timeout: 10.0
+  # Important: octomap integration
+  monitored_planning_scene_publish_geometry_updates: true
+  monitored_planning_scene_publish_state_updates: true
+  monitored_planning_scene_publish_transforms_updates: true
+
+occupancy_map_monitor:
+  octomap_frame: "map"
+  octomap_topic: "/octomap_full"
+  max_range: 5.0
+  resolution: 0.05
+    
+
+
 planning_pipelines:
-  #namespace: "moveit_cpp"  # optional, default is ~
   pipeline_names: ["ompl"]
+
 plan_request_params:
   planning_attempts: 1
   planning_pipeline: ompl
   max_velocity_scaling_factor: 1.0
   max_acceleration_scaling_factor: 1.0
-  
-  
-  
-  
-  
-  
-  
-  
-  # 
-  # 
-# move_group:
-  # ros__parameters:
-# 
-    # robot_description: robot_description
-    # robot_description_semantic: robot_description_semantic
-# 
-    # Planning parameters
-    # plan_execution:
-      # max_replan_attempts: 10
-      # record_trajectory_state_frequency: 0.0
-# 
-    # Planning pipeline configuration
-    # planning_pipelines:
-      # ompl:
-        # planning_plugin: ompl_interface/OMPLPlanner
-        # request_adapters: >
-          # default_planner_request_adapters/AddTimeParameterization
-          # default_planner_request_adapters/FixWorkspaceBounds
-          # default_planner_request_adapters/FixStartStateBounds
-          # default_planner_request_adapters/FixStartStateCollision
-          # default_planner_request_adapters/FixStartStatePathConstraints
-        # start_state_max_bounds_error: 0.1
-# 
-    # Planning scene monitor configuration
-    # planning_scene_monitor:
-      # publish_planning_scene: true
-      # publish_geometry_updates: true
-      # publish_state_updates: true
-      # publish_transforms_updates: true
-      # robot_description: robot_description
-# 
-    # Octomap integration for 3D planning
-    # octomap_frame: map
-    # octomap_resolution: 0.10
-# 
-    # sensors:
-# 
-      # - sensor_plugin: occupancy_map_monitor/OctomapUpdater
-        # map_topic: /octomap_full
-        # max_update_rate: 1.0
-# 
-# OMPL planner configurations
-
-# planner_configs:
-  # global_planning_action_name: /global_planner/plan
-  # RRTstar:
-    # type: geometric::RRTstar
-    # range: 2.0                # Increased for better exploration
-  # PRMstar:
-    # type: geometric::PRMstar
-  # RRTConnect:
-    # type: geometric::RRTConnect
-    # range: 2.0                # Faster but not optimal
-  # LazyPRMstar:
-    # type: geometric::LazyPRMstar
-  # KPIECE1:
-    # type: geometric::KPIECE1
-    # range: 1.0
-
-# Group-specific configuration
-# group_configs:
-#   drone_group:
-#     default_planner_config: RRTstar
-#     enforce_joint_model_state_space: false   # Floating-base UAV: use SE3
-#     minx: -20.0
-#     maxx: 20.0
-#     miny: -20.0
-#     maxy: 20.0
-#     minz: 0.5
-#     maxz: 10.0

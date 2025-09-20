@@ -63,6 +63,21 @@ def generate_launch_description():
         'moveit_config.rviz'
     )
 
+
+    # OMPL planner pipeline
+    # ompl_params = os.path.join(
+    # get_package_share_directory('maneuver_path_planner'),
+    # 'config',
+    # 'ompl_planning.yaml'
+    # )
+    # ompl_planning_pipeline_config = {'ompl_planning_pipeline_config': ompl_params}
+
+
+    controllers_path = os.path.join(
+        get_package_share_directory('drone_moveit_config'))
+    controllers_yaml = os.path.join(controllers_path, 'config', 'moveit_controllers.yaml')
+
+
     container = ComposableNodeContainer(
             name="hybrid_planning_container",
             namespace="/",
@@ -77,6 +92,9 @@ def generate_launch_description():
                         global_planner_param,
                         robot_description,
                         robot_description_semantic,
+                        kinematics_parameters,
+                        controllers_yaml,
+                        # ompl_planning_pipeline_config,
                     ],
                 ),
                 ComposableNode(
@@ -87,18 +105,29 @@ def generate_launch_description():
                         local_planner_param,
                         robot_description,
                         robot_description_semantic,
+                        kinematics_parameters,
+                        controllers_yaml,
                     ],
                 ),
                 ComposableNode(
                     package="moveit_hybrid_planning",
-                    plugin="moveit_hybrid_planning/HybridPlanningManager",
+                    plugin="moveit::hybrid_planning::HybridPlanningManager",
                     name="hybrid_planning_manager",
                     parameters=[hybrid_planner_param],
                 ),
             ],
             output="screen",
     )
+
+    
+
     return LaunchDescription([
+        # Node(
+        #     package='moveit_simple_controller_manager',
+        #     executable='ros2_control_node',
+        #     parameters=[controllers_yaml],
+        #     output='screen'
+        # ),
 
 
         container,
