@@ -10,6 +10,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(octomap_msgs REQUIRED)
 find_package(octomap REQUIRED) # Если необходимо
+
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -18,8 +20,22 @@ add_executable(octomap_publisher src/octomap_publisher.cpp)
 target_link_libraries(octomap_publisher ${rclcpp_LIBRARIES} ${octomap_msgs_LIBRARIES} octomap) # Если необходимо
 ament_target_dependencies(octomap_publisher rclcpp octomap_msgs)
 
+
+add_executable(send_goal src/send_goal.cpp)
+ament_target_dependencies(send_goal
+  rclcpp
+  geometry_msgs
+  std_msgs
+)
+
+install(TARGETS
+  send_goal
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(TARGETS octomap_publisher
   DESTINATION lib/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -32,8 +48,26 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+set(LIBRARIES
+    # Components
+    moveit_global_planner_component
+    moveit_hybrid_planning_manager
+    moveit_local_planner_component)
+ 
+
+
 install(
   DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+ )
+  
+install(
+  DIRECTORY rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
