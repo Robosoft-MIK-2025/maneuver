@@ -22,7 +22,7 @@ def generate_launch_description():
         ExecuteProcess(
             cmd=['cp', '/home/ros2_ws/src/gz_worlds/labirinth.sdf', '/home/mobile/PX4-Autopilot/Tools/simulation/gz/worlds/', '\n'
                  'cd', '/home/mobile/PX4-Autopilot', '\n', 
-                 'PX4_GZ_WORLD=labirinth', 'make', 'px4_sitl', 'gz_x500_depth'],
+                 'PX4_GZ_WORLD=labirinth', 'make', 'px4_sitl', 'gz_x500_lidar_2d'],
             output='log',
             shell=True
         ),
