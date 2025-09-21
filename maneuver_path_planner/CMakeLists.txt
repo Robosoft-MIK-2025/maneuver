@@ -20,6 +20,19 @@ add_executable(octomap_publisher src/octomap_publisher.cpp)
 target_link_libraries(octomap_publisher ${rclcpp_LIBRARIES} ${octomap_msgs_LIBRARIES} octomap) # Если необходимо
 ament_target_dependencies(octomap_publisher rclcpp octomap_msgs)
 
+
+add_executable(send_goal src/send_goal.cpp)
+ament_target_dependencies(send_goal
+  rclcpp
+  geometry_msgs
+  std_msgs
+)
+
+install(TARGETS
+  send_goal
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(TARGETS octomap_publisher
   DESTINATION lib/${PROJECT_NAME})
 

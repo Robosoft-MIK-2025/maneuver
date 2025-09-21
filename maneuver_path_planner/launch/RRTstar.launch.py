@@ -11,7 +11,12 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 
+
+
+
 def generate_launch_description():
+    
+
     global_planner_param = os.path.join(
         get_package_share_directory('maneuver_path_planner'),
         'config',
@@ -72,52 +77,59 @@ def generate_launch_description():
     # )
     # ompl_planning_pipeline_config = {'ompl_planning_pipeline_config': ompl_params}
 
+    ompl_planning_path = os.path.join(
+        get_package_share_directory('drone_moveit_config'))
+    ompl_planning = os.path.join(ompl_planning_path, 'config', 'ompl_planning.yaml')
+    planner_parameters = {'ros_parameters': ompl_planning}
+
+
 
     controllers_path = os.path.join(
         get_package_share_directory('drone_moveit_config'))
-    controllers_yaml = os.path.join(controllers_path, 'config', 'moveit_controllers.yaml')
+    moveit_controllers = os.path.join(controllers_path, 'config', 'moveit_controllers.yaml')
 
 
-    container = ComposableNodeContainer(
-            name="hybrid_planning_container",
-            namespace="/",
-            package="rclcpp_components",
-            executable="component_container",
-            composable_node_descriptions=[
-                ComposableNode(
-                    package="moveit_hybrid_planning",
-                    plugin="moveit::hybrid_planning::GlobalPlannerComponent",
-                    name="global_planner",
-                    parameters=[
-                        global_planner_param,
-                        robot_description,
-                        robot_description_semantic,
-                        kinematics_parameters,
-                        controllers_yaml,
-                        # ompl_planning_pipeline_config,
-                    ],
-                ),
-                ComposableNode(
-                    package="moveit_hybrid_planning",
-                    plugin="moveit::hybrid_planning::LocalPlannerComponent",
-                    name="local_planner",
-                    parameters=[
-                        local_planner_param,
-                        robot_description,
-                        robot_description_semantic,
-                        kinematics_parameters,
-                        controllers_yaml,
-                    ],
-                ),
-                ComposableNode(
-                    package="moveit_hybrid_planning",
-                    plugin="moveit::hybrid_planning::HybridPlanningManager",
-                    name="hybrid_planning_manager",
-                    parameters=[hybrid_planner_param],
-                ),
-            ],
-            output="screen",
-    )
+    # container = ComposableNodeContainer(
+    #         name="hybrid_planning_container",
+    #         namespace="/",
+    #         package="rclcpp_components",
+    #         executable="component_container",
+    #         composable_node_descriptions=[
+    #             ComposableNode(
+    #                 package="moveit_hybrid_planning",
+    #                 plugin="moveit::hybrid_planning::GlobalPlannerComponent",
+    #                 name="global_planner",
+    #                 parameters=[
+    #                     global_planner_param,
+    #                     robot_description,
+    #                     robot_description_semantic,
+    #                     kinematics_parameters,
+    #                     controllers_yaml,
+    #                     # ompl_planning_pipeline_config,
+    #                 ],
+    #             ),
+    #             ComposableNode(
+    #                 package="moveit_hybrid_planning",
+    #                 plugin="moveit::hybrid_planning::LocalPlannerComponent",
+    #                 name="local_planner",
+    #                 parameters=[
+    #                     local_planner_param,
+    #                     robot_description,
+    #                     robot_description_semantic,
+    #                     kinematics_parameters,
+    #                     controllers_yaml,
+    #                 ],
+    #             ),
+    #             ComposableNode(
+    #                 package="moveit_hybrid_planning",
+    #                 plugin="moveit::hybrid_planning::HybridPlanningManager",
+    #                 name="hybrid_planning_manager",
+    #                 parameters=[hybrid_planner_param],
+    #             ),
+    #         ],
+    #         output="screen",
+    # )
+
 
     
 
@@ -130,7 +142,33 @@ def generate_launch_description():
         # ),
 
 
-        container,
+        # container,
+        Node(
+            package="joint_state_publisher",
+            executable='joint_state_publisher',
+            name='joint_state_publisher',
+            output='screen',
+            parameters=[robot_description]
+        ),
+
+        Node(
+            package="moveit_ros_move_group",
+            executable="move_group",
+            name="move_group",
+            output="screen",
+            parameters=[
+                robot_description,
+                # {'planning_pipeline': 'ompl'},
+                robot_description_semantic,
+                {'planning_pipeline/planning_plugin': 'ompl_interface/OMPLPlanner'}
+                # # global_planner_param,
+                # # moveit_controllers,
+                # planner_parameters,
+                # kinematics_parameters
+            ],
+        ),
+
+        
 
         Node(
             package='robot_state_publisher',

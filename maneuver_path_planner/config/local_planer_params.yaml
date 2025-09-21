@@ -25,7 +25,7 @@ group_name: "drone_group"
 # Subscribed topics
 monitored_planning_scene: "/planning_scene"
 collision_object_topic: "/collision_object"
-joint_states_topic: "/joint_states"
+# joint_states_topic: "/joint_states"
 
 # ForwardTrajectory plugin parameter
 stop_before_collision: true
